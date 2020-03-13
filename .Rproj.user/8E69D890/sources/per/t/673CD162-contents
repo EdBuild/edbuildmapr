@@ -1,0 +1,36 @@
+## how to install local packages
+
+#### this updates the R documentation- takes the Readme comments at the top of each function and changes them into HTML so when you ??edbuild, help files show up
+setwd("~/Box Sync/Data/Data and documentation/R Functions/EdBuildR_explorations/edbuildmapr") ## the working directory of the package you want to install
+devtools::document() ## this to convert roxygen comments to HTML
+
+#### this installs the package
+setwd("~/Box Sync/Data/Data and documentation/R Functions/EdBuildR_explorations/") ## the working directory of the package you want to install without the folder name
+devtools::install("edbuildmapr") ## installs the package
+
+??edbuildr  ### shows the help files
+
+remove.packages("edbuildmapr") ## uninstalls the package
+
+### ### ### ### ### ### ### ### ### ### ### ###
+### if you made changes to the readme comments after you have already installed you need to::
+## 1. remove the package (line 13)
+## 2. close R
+## 3. reopen R and this script and run lines 4 and 5 to reconvert new comments to HTML
+## 4. if you want to reintall, run lines 8 and 9
+### ### ### ### ### ### ### ### ### ### ### ###
+
+### ### ### ### ### ### ### ### ### ### ### ###
+### To preview documentation without installing package:
+## 1. run lines 4 and 5
+## 2. run ?functionname
+### ### ### ### ### ### ### ### ### ### ### ###
+
+########## FOR REFERENCE ONLY ######
+### devtools::check() #runs R CMD check
+### usethis::use_cran_comments() #opens cran-comments .md and adds to your .Rbuildignore
+### usethis::use_readme_rmd() #opens readme .rmd template and adds to your .Rbuildignore
+### usethis::use_build_ignore(file) # adds a file to your ignore
+### usethis::use_news_md() # adds NEWS.md file to project
+### devtools::release() to go through final checklist and release
+### cmd + shift + / to make roxygen comments corrent length

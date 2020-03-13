@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583252527896.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2013287212",
+    "id" : "47323E3",
+    "lastKnownWriteTime" : 1583428080,
+    "last_content_update" : 1583428080351,
+    "path" : "~/Box Sync/Data/Data and documentation/R Functions/EdBuildR_explorations/edbuildmapr/README.Rmd",
+    "project_path" : "README.Rmd",
+    "properties" : {
+        "cursorPosition" : "42,0",
+        "scrollLine" : "25"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

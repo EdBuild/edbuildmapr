@@ -1,0 +1,52 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# edbuildmapr
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of `edbuildmapr` is to simplify the use of school district shapefiles. 
+The package import US Census Bureau, Education Demographic and
+Geographic Estimates Program, Composite School District Boundaries 
+Files for 2013-2017 with the option to attach EdBuild's master dataset of school district finance, 
+student demographics, and community economic indicators for every school district in the United States.  
+The master dataset is built from the US Census, Annual Survey of School System Finances (F33) 
+and joins data from the National Center for Education Statistics, Common Core of Data; 
+the US Census, Small Area Income and Poverty Estimates; and the US Census, 
+Education Demographic and Geographic Estimates. Additional functions in the package create a dataset 
+of all school district neighbors as either a dataframe or a shapefile and maps of selected districts 
+at the state or neighbor level symbolized by a selected variable in EdBuild's 
+master dataset. 
+
+## Installation
+
+You can install the released version of edbuildmapr from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("edbuildmapr")
+```
+
+## Example
+
+To import school district spatial data for all districts with EdBuild's master data: 
+
+```{r example}
+library(edbuildmapr)
+## import school district shapefile for the year 2017 with EdBuild's master dataset attached. 
+sd_shp_17 <- sd_shapepull("2017", with_data = TRUE)
+
+str(sd_shp_17)
+```
