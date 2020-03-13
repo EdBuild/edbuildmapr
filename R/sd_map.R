@@ -23,7 +23,7 @@
 #' @keywords school districts map EdBuild
 #' @usage sd_map(state="New Jersey", map_var = "Student Poverty", level =
 #'   "elem", legend= TRUE)
-#' @import dplyr sf tmap magrittr
+#' @import dplyr sf tmap magrittr lwgeom
 #' @return An image of map which can be written out with
 #'   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 #' @seealso \code{\link{sd_neighbor_map}}
@@ -54,7 +54,7 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
   pos_vars <- list("Student Poverty", "Percent Nonwhite", "FRL", "Total Revenue", "Local Revenue",
                    "State Revenue", "Median Household Income", "Median Property Value")
 
-  shape.clean <- sf::st_make_valid(state_shape) # making all geometries valid
+  shape.clean <- lwgeom::st_make_valid(state_shape) # making all geometries valid
 
   if(map_var %in% pos_vars == FALSE) {
 

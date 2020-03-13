@@ -22,8 +22,9 @@ License: CC0
 Imports: 
     dplyr,
     magrittr,
+    lwgeom,
     spdep,
-    sf (>= 0.9.0),
+    sf,
     stringr,
     tidyselect (>= 1.0.0), 
     tmap

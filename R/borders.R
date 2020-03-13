@@ -20,7 +20,7 @@
 #'@keywords school districts map EdBuild
 #'@usage borders(shapefile = "2017", id = "GEOID", diff_var = "StPovRate",
 #'  export = "dataframe")
-#'@import dplyr sf spdep tidyselect magrittr
+#'@import dplyr sf spdep tidyselect magrittr lwgeom
 #'@importFrom utils download.file unzip
 #'@return A dataframe or spatial object where each observation is a neighboring
 #'  pair of districts.
@@ -85,7 +85,7 @@ borders = function(shapefile = "2017", id = "GEOID", diff_var = "StPovRate", exp
   else{
 
   #### clean this shapefile
-  shape.clean <- sf::st_make_valid(shape) # making all geometries valid
+  shape.clean <- lwgeom::st_make_valid(shape) # making all geometries valid
 
   shape_sf <- sf::st_collection_extract(shape.clean, type = c("POLYGON")) # taking just the polygons from the original shape data, in case it includes stray points or other
 
