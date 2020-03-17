@@ -3,7 +3,7 @@
 \docType{package}
 \name{edbuildmapr}
 \alias{edbuildmapr}
-\title{edbuildmapr: A package to download school district shapefiles, perform spatial
+\title{edbuildmapr: A package to download school district geospatial data, perform spatial
 analysis, and create formatted exportable maps.}
 \description{
 Import US Census Bureau, Education Demographic and Geographic Estimates
