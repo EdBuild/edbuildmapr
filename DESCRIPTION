@@ -1,6 +1,6 @@
 Package: edbuildmapr
 Type: Package
-Title: Download School District Shapefiles, Perform Spatial Analysis, and Create Formatted Exportable Maps
+Title: Download School District Geospatial Data, Perform Spatial Analysis, and Create Formatted Exportable Maps
 Version: 0.1.0
 Authors@R: c(
     person("Megan", "Brodzik", email = "megan@edbuild.org", role = c("cre", "aut")),

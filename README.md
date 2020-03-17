@@ -43,7 +43,7 @@ master data:
 library(edbuildmapr)
 ## import school district shapefile for the year 2017 with EdBuild's master dataset attached. 
 sd_shp_17 <- sd_shapepull("2017", with_data = TRUE)
-#> Reading layer `shapefile_1718_4269' from data source `/private/var/folders/5n/cz5rxt2d02jcqlt7q25sy37m0000gp/T/RtmpJua01l/file17c8e3633c99d/shapefile_1718_4269.shp' using driver `ESRI Shapefile'
+#> Reading layer `shapefile_1718_4269' from data source `/private/var/folders/5n/cz5rxt2d02jcqlt7q25sy37m0000gp/T/RtmpIfj79x/file7dc910723388/shapefile_1718_4269.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 13330 features and 6 fields
 #> geometry type:  MULTIPOLYGON
 #> dimension:      XY
@@ -113,4 +113,3 @@ str(sd_shp_17)
   - Megan Brodzik (<megan@edbuild.org>), maintainer
   - Cecilia Depman (<cecilia@edbuild.org>), author
   - Sara Hodges (<sara@edbuild.org>), author
-  - Kailey Spencer (<kailey.spencer.depoe@gmail.com>), contributor
