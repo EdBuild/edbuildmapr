@@ -1,4 +1,4 @@
-#'edbuildmapr: A package to download school district shapefiles, perform spatial
+#'edbuildmapr: A package to download school district geospatial data, perform spatial
 #'analysis, and create formatted exportable maps.
 #'
 #'Import US Census Bureau, Education Demographic and Geographic Estimates

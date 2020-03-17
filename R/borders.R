@@ -20,8 +20,10 @@
 #'@keywords school districts map EdBuild
 #'@usage borders(shapefile = "2017", id = "GEOID", diff_var = "StPovRate",
 #'  export = "dataframe")
-#'@import dplyr sf spdep tidyselect magrittr lwgeom
+#'@import dplyr sf tidyselect magrittr
 #'@importFrom utils download.file unzip
+#'@importFrom spdep poly2nb
+#'@importFrom lwgeom st_make_valid
 #'@return A dataframe or spatial object where each observation is a neighboring
 #'  pair of districts.
 #'@format A data frame with 7 variables or spatial object with 8 variables:
@@ -29,7 +31,7 @@
 #'  \item{u_id}{Unique id of neighbor pair, a
 #'  compilation of id1 and id2}
 #'  \item{id1}{Unique id of first district}
-#'  \item{id2}{Unqiue id of second district}
+#'  \item{id2}{Unique id of second district}
 #'  \item{length}{Length of border in
 #'  meters for the school district shapefiles, and in the units associated with
 #'  the projection of the shapefile if the user imports their own shapefile}

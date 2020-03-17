@@ -28,7 +28,9 @@
 #'   Chicago is a unified district with 1 unified neighbor,
 #'   16 secondary neighbors, and 32 elementary neighbors.
 #' @keywords neighbors map EdBuild
-#' @import dplyr tmap stringr magrittr sf lwgeom
+#' @import dplyr stringr magrittr sf
+#' @importFrom tmap tm_shape tm_fill tm_borders tm_layout
+#' @importFrom lwgeom st_make_valid
 #' @return An image of map which can be written out with
 #'   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 #' @seealso \code{\link{sd_map}}
@@ -87,7 +89,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0(formatC(x*100, digits=0, format="f"), " %"))
       format_color = '#2586a5'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/student_poverty_rate_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/student_poverty_rate_map.png')")
     }
     else if(map_var == "Total Revenue"){
       colors <- c('#edf8fb', '#b2e2e2', '#66c2a4', '#277f4d', '#1a5f38', '#0f3720', '#001107')
@@ -97,7 +99,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
       format_color = '#277f4d'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/total_revenue_pp_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/total_revenue_pp_map.png')")
 
     }
     else if(map_var == "Local Revenue"){
@@ -108,7 +110,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
       format_color = '#277f4d'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/local_revenue_pp_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/local_revenue_pp_map.png')")
 
     }
     else if(map_var == "State Revenue"){
@@ -119,7 +121,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
       format_color = '#277f4d'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/state_revenue_pp_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/state_revenue_pp_map.png')")
 
     }
     else if(map_var == "Median Household Income"){
@@ -130,7 +132,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
       format_color = '#73b9d1'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/median_household_income_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_household_income_map.png')")
 
     }
     else if(map_var == "Median Property Value"){
@@ -141,7 +143,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = "," )))
       format_color = '#80cdc1'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/median_property_value_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_property_value_map.png')")
 
     }
     else if(map_var == "FRL"){
@@ -152,7 +154,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0(formatC(x*100, digits=0, format="f"), " %"))
       format_color = '#823a29'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/frl_rate_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/frl_rate_map.png')")
 
     }
     else if(map_var == "Percent Nonwhite"){
@@ -163,7 +165,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       legend_format = list(fun=function(x) paste0(formatC(x*100, digits=0, format="f"), " %"))
       format_color = '#7d52b7'
 
-      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, '~/Documents/percent_nonwhite_map.png')")
+      message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/percent_nonwhite_map.png')")
 
     }
     else {
