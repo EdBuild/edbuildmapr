@@ -25,7 +25,6 @@
 #'   "elem", legend= TRUE)
 #' @import dplyr sf magrittr
 #' @importFrom tmap tm_shape tm_fill tm_borders tm_layout
-#' @importFrom lwgeom st_make_valid
 #' @return An image of map which can be written out with
 #'   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 #' @seealso \code{\link{sd_neighbor_map}}
@@ -56,7 +55,7 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
   pos_vars <- list("Student Poverty", "Percent Nonwhite", "FRL", "Total Revenue", "Local Revenue",
                    "State Revenue", "Median Household Income", "Median Property Value")
 
-  shape.clean <- lwgeom::st_make_valid(state_shape) # making all geometries valid
+  shape.clean <- sf::st_make_valid(state_shape) # making all geometries valid
 
   if(map_var %in% pos_vars == FALSE) {
 

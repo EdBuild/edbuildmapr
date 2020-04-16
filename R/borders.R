@@ -23,7 +23,6 @@
 #'@import dplyr sf tidyselect magrittr
 #'@importFrom utils download.file unzip
 #'@importFrom spdep poly2nb
-#'@importFrom lwgeom st_make_valid
 #'@return A dataframe or spatial object where each observation is a neighboring
 #'  pair of districts.
 #'@format A data frame with 7 variables or spatial object with 8 variables:
@@ -87,7 +86,7 @@ borders = function(shapefile = "2017", id = "GEOID", diff_var = "StPovRate", exp
   else{
 
   #### clean this shapefile
-  shape.clean <- lwgeom::st_make_valid(shape) # making all geometries valid
+  shape.clean <- sf::st_make_valid(shape) # making all geometries valid
 
   shape_sf <- sf::st_collection_extract(shape.clean, type = c("POLYGON")) # taking just the polygons from the original shape data, in case it includes stray points or other
 

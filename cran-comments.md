@@ -1,3 +1,20 @@
+## Resubmission
+This is a resubmission. In this version I have: 
+
+* Changed the import of `st_make_valid` from `lwgeom` to `sf` as object `st_make_valid` is exported by `sf` version 0.9.1.
+
+## Test environments
+* local OS X install, R 3.6.2
+* win-builder (devel and release)
+
+## R CMD check results
+
+0 errors | 0 warnings | 0 notes
+
+* In the win-builder release check there was this error (Package required and available but unsuitable version: 'tmap'). This version of 'tmap' is required and available on CRAN but is not yet availble through win-builder. 
+
+## Previous cran-comments
+
 ## Test environments
 * local OS X install, R 3.6.2
 * win-builder (devel and release)

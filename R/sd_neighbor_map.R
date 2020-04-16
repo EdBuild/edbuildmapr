@@ -30,7 +30,6 @@
 #' @keywords neighbors map EdBuild
 #' @import dplyr stringr magrittr sf
 #' @importFrom tmap tm_shape tm_fill tm_borders tm_layout
-#' @importFrom lwgeom st_make_valid
 #' @return An image of map which can be written out with
 #'   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 #' @seealso \code{\link{sd_map}}
@@ -65,7 +64,7 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
     sd_url = "https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/SD+Types/sd_type_17_18.csv"
     sd_type <- read.csv(file = sd_url, stringsAsFactors = FALSE)
 
-    shape.clean <- lwgeom::st_make_valid(shape) # making all geometries valid
+    shape.clean <- sf::st_make_valid(shape) # making all geometries valid
 
     pairs_url = "https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/Pairs/pairs_1617.csv"
     pairs <- read.csv(file = pairs_url, stringsAsFactors = FALSE) %>%
