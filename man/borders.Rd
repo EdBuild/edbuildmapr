@@ -2,7 +2,7 @@
 % Please edit documentation in R/borders.R
 \name{borders}
 \alias{borders}
-\title{A function to define the borders between neighboring districts}
+\title{A function to create a file of the borders between neighboring districts}
 \format{A data frame with 7 variables or spatial object with 8 variables:
  \describe{ \item{year}{data year}
  \item{u_id}{Unique id of neighbor pair, a
@@ -21,20 +21,20 @@
  \item{geography}{Linestring
  spatial object if user selected to export as a shape} }}
 \usage{
-borders(shapefile = "2017", id = "GEOID", diff_var = "StPovRate",
+borders(shapefile = "2018", id = "GEOID", diff_var = "StPovRate",
  export = "dataframe")
 }
 \arguments{
 \item{shapefile}{The polygon shapefile for which you want to define the
 borders. To import the school district shapefile for school years between
-2013 and 2017, input the four digit year. Import any polygon shapefile by
+2013 and 2018, input the four digit year. Import any polygon shapefile by
 inputting the absolute path to the shapefile on your computer. Defaults to
-the 2017 school district shapes.}
+the 2018 school district shapes.}
 
 \item{id}{Unique variable used to create id for each pair of neighbors.
 Defaults to GEOID, the unique id in Census data.}
 
-\item{diff_var}{Name of a numeric variable on which to rank the difference
+\item{diff_var}{Name of a numeric variable by which to rank the difference
 between neighbors. Use diff_var = “options” to print a list of the
 variables. Defaults to "StPovRate", which returns the percentage point
 difference in Student Poverty Rate.}
@@ -53,12 +53,12 @@ This function allows you to create a dataframe or linestring
  shapefile can be used.
 }
 \examples{
-\donttest{dataframe_ex <- borders(shapefile = "2017",
+\donttest{dataframe_ex <- borders(shapefile = "2018",
                  id = "GEOID",
                  diff_var = "MHI",
                  export = "dataframe")
 
-shapefile_ex <- borders(shapefile = "2017",
+shapefile_ex <- borders(shapefile = "2018",
                  id = "GEOID",
                  diff_var = "pctNW",
                  export = "shape")}

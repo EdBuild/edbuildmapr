@@ -30,12 +30,12 @@
 #' @keywords neighbors map EdBuild
 #' @import dplyr stringr magrittr sf
 #' @importFrom tmap tm_shape tm_fill tm_borders tm_layout
-#' @return An image of map which can be written out with
+#' @return An image of the map which can be written out with
 #'   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 #' @seealso \code{\link{sd_map}}
 #' @export
 #' @examples
-#' \donttest{map <- sd_neighbor_map(school_district = "2601103", "Median Household Income")}
+#' \donttest{map <- sd_neighbor_map(school_district = "2601103", "Percent Nonwhite")}
 
 sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", legend= TRUE, type = "like"){
 
@@ -95,7 +95,8 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       title_name = "Total Revenue Per Pupil"
       variable = "SLRPP"
       breaks = c(0, 7500, 10000, 12500, 15000, 20000, 100000, 1000000)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      #legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#277f4d'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/total_revenue_pp_map.png')")
@@ -106,7 +107,8 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       title_name = "Local Revenue Per Pupil"
       variable = "LRPP"
       breaks = c(0, 1000, 2500, 5000, 7500, 10000, 15000, 25000, 100000, 1000000)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      #legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#277f4d'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/local_revenue_pp_map.png')")
@@ -117,7 +119,8 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       title_name = "State Revenue Per Pupil"
       variable = "SRPP"
       breaks = c(0, 1000, 2500, 5000, 7500, 10000, 15000, 25000, 100000, 1000000)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      #legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#277f4d'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/state_revenue_pp_map.png')")
@@ -128,7 +131,8 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       title_name = "Median Household Income"
       variable = "MHI"
       breaks = c(0, 15000, 25000, 40000, 50000, 65000, 85000, 100000, 150000, 2000001)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      #legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#73b9d1'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_household_income_map.png')")
@@ -139,7 +143,8 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       title_name = "Median Property Value"
       variable = "MPV"
       breaks = c(0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 2000001)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = "," )))
+      #legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#80cdc1'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_property_value_map.png')")
@@ -179,7 +184,9 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       GEOIDS <- c(pairs$GEOID.1, school_district)
 
       shape_small <- shape %>%
-        dplyr::filter(GEOID %in% GEOIDS)
+        dplyr::filter(GEOID %in% GEOIDS) %>%
+        mutate(MPV = as.numeric(MPV),
+                MHI = as.numeric(MHI))
 
       selected <- shape_small %>%
         dplyr::filter(GEOID == school_district)
@@ -200,7 +207,9 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
                         main.title.color = format_color,
                         frame = FALSE,
                         legend.outside = TRUE,
-                        legend.outside.position = "left") +
+                        legend.outside.position = "left",
+                        legend.outside.size = .4,
+                        legend.text.size = .5) +
         tmap::tm_layout(legend.show = legend)
 
 
@@ -211,7 +220,9 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
       GEOIDS <- c(pairs$GEOID.1, school_district)
 
       shape_small <- shape %>%
-        dplyr::filter(GEOID %in% GEOIDS)
+        dplyr::filter(GEOID %in% GEOIDS) %>%
+        mutate(MPV = as.numeric(MPV),
+               MHI = as.numeric(MHI))
 
       selected <- shape_small %>%
         dplyr::filter(GEOID == school_district)
@@ -232,7 +243,9 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
                         main.title.color = format_color,
                         frame = FALSE,
                         legend.outside = TRUE,
-                        legend.outside.position = "left") +
+                        legend.outside.position = "left",
+                        legend.outside.size = .4,
+                        legend.text.size = .5) +
         tmap::tm_layout(legend.show = legend)
     }
   }

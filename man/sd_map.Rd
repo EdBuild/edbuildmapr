@@ -4,12 +4,16 @@
 \alias{sd_map}
 \title{A function to create a map of all school districts in a state}
 \usage{
-sd_map(state="New Jersey", map_var = "Student Poverty", level =
-  "elem", legend= TRUE)
+sd_map(state="New Jersey", county = NULL, map_var = "Student Poverty",
+  level = "elem", legend= TRUE)
 }
 \arguments{
 \item{state}{The state for which you want to map school districts.  Defaults
 to New Jersey.}
+
+\item{county}{The county for which you want to map school districts.
+Defaults to NULL. To view a full list of counties use
+\code{sd_shapepull(year = "2018", with_data = TRUE)}}
 
 \item{map_var}{Variable by which to symbolize the map. \itemize{
 \item{\code{Student Poverty} colors by student poverty rate}
@@ -24,13 +28,13 @@ to \code{Student Poverty}}
 
 \item{level}{Selects which level of school districts you want displayed in
 the map. \itemize{ \item{\code{elem} {displays elementary and unified
-districts}} \item{\code{secon} {displays secondary and unified
-districts}}} Defaults to \code{elem}.}
+districts}} \item{\code{secon} {displays secondary and unified districts}}}
+Defaults to \code{elem}.}
 
 \item{legend}{If TRUE, legend is visible. Defaults to TRUE.}
 }
 \value{
-An image of map which can be written out with
+An image of the map which can be written out with
   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 }
 \description{

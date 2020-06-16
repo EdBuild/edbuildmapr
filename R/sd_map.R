@@ -5,6 +5,9 @@
 #'   variables from the EdBuild master dataset.
 #' @param state The state for which you want to map school districts.  Defaults
 #'   to New Jersey.
+#' @param county The county for which you want to map school districts.
+#'   Defaults to NULL. To view a full list of counties use
+#'   \code{sd_shapepull(year = "2018", with_data = TRUE)}
 #' @param map_var Variable by which to symbolize the map. \itemize{
 #'   \item{\code{Student Poverty} colors by student poverty rate}
 #'   \item{\code{Total Revenue} colors by state and local revenue per pupil}
@@ -17,15 +20,15 @@
 #'   to \code{Student Poverty}
 #' @param level Selects which level of school districts you want displayed in
 #'   the map. \itemize{ \item{\code{elem} {displays elementary and unified
-#'   districts}} \item{\code{secon} {displays secondary and unified
-#'   districts}}} Defaults to \code{elem}.
+#'   districts}} \item{\code{secon} {displays secondary and unified districts}}}
+#'   Defaults to \code{elem}.
 #' @param legend If TRUE, legend is visible. Defaults to TRUE.
 #' @keywords school districts map EdBuild
-#' @usage sd_map(state="New Jersey", map_var = "Student Poverty", level =
-#'   "elem", legend= TRUE)
+#' @usage sd_map(state="New Jersey", county = NULL, map_var = "Student Poverty",
+#'   level = "elem", legend= TRUE)
 #' @import dplyr sf magrittr
 #' @importFrom tmap tm_shape tm_fill tm_borders tm_layout
-#' @return An image of map which can be written out with
+#' @return An image of the map which can be written out with
 #'   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 #' @seealso \code{\link{sd_neighbor_map}}
 #' @export
@@ -34,13 +37,15 @@
 #'  level = "elem", legend= TRUE)}
 
 
-sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "elem", legend= TRUE) {
-  shape <- sd_shapepull(data_year = "2017", with_data = TRUE)
+sd_map <- function (state="New Jersey", county = NULL,  map_var = "Student Poverty", level = "elem", legend= TRUE) {
+  shape <- sd_shapepull(data_year = "2018", with_data = TRUE)
 
   states <- shape
   sf::st_geometry(states) <- NULL
 
   states_list <- as.list(levels(as.factor(states$State)))
+
+  county_list <- as.list(levels(as.factor(states$County)))
 
   state_shape <- shape %>%
     dplyr::mutate(NAME = as.character(NAME),
@@ -50,7 +55,9 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
                   sdType= as.character(sdType)) %>%
     dplyr::filter(State == state) %>%
     dplyr::mutate(frl_rate = dplyr::case_when(frl_rate > 1 ~  NA_real_,
-                                              TRUE ~ frl_rate))
+                                              TRUE ~ frl_rate),
+                  MPV = as.numeric(MPV),
+                  MHI = as.numeric(MHI))
 
   pos_vars <- list("Student Poverty", "Percent Nonwhite", "FRL", "Total Revenue", "Local Revenue",
                    "State Revenue", "Median Household Income", "Median Property Value")
@@ -87,7 +94,8 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
       title_name = "Total Revenue Per Pupil"
       variable = "SLRPP"
       breaks = c(0, 7500, 10000, 12500, 15000, 20000, 100000, 1000000)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      #legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#277f4d'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/total_revenue_pp_map.png')")
@@ -98,7 +106,8 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
       title_name = "Local Revenue Per Pupil"
       variable = "LRPP"
       breaks = c(0, 1000, 2500, 5000, 7500, 10000, 15000, 25000, 100000, 1000000)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      # legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#277f4d'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/local_revenue_pp_map.png')")
@@ -109,7 +118,8 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
       title_name = "State Revenue Per Pupil"
       variable = "SRPP"
       breaks = c(0, 1000, 2500, 5000, 7500, 10000, 15000, 25000, 100000, 1000000)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      # legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#277f4d'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/state_revenue_pp_map.png')")
@@ -120,7 +130,8 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
       title_name = "Median Household Income"
       variable = "MHI"
       breaks = c(0, 15000, 25000, 40000, 50000, 65000, 85000, 100000, 150000, 2000001)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      # legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#73b9d1'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_household_income_map.png')")
@@ -131,7 +142,8 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
       title_name = "Median Property Value"
       variable = "MPV"
       breaks = c(0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 2000001)
-      legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = "," )))
+      # legend_format = list(fun=function(x) paste0("$ ", formatC(x, digits=0, format="f", big.mark = ",")))
+      legend_format = list(fun = function(x) paste0("$", x/1000, "k"))
       format_color = '#80cdc1'
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_property_value_map.png')")
@@ -173,6 +185,40 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
         dplyr::filter(sdType == "secon" | sdType == "uni")
     }
 
+    if(!is.null(county)) {
+
+      if (county %in% county_list == FALSE) {
+        message("Error: Please check your spelling of the county. To view correct county spellings use sd_shapepull(with_data = TRUE)")
+      }
+      else if (county %in% county_list == TRUE){
+
+        county_shape <- shape.clean %>%
+        dplyr::filter(County == county)
+
+      map <- tmap::tm_shape(county_shape) +
+        tmap::tm_fill(variable, breaks=breaks, title = title_name,
+                      palette = colors,
+                      legend.format=legend_format) +
+        tmap::tm_shape(county_shape) +
+        tmap::tm_borders(lwd=.15, col = "#cfcccc", alpha = 1) +
+        tmap::tm_layout(bg.color = NA,
+                        main.title = paste0(county, ", ", state),
+                        main.title.position = "center",
+                        main.title.color = format_color,
+                        legend.position = c("left", "bottom"),
+                        legend.text.color = format_color,
+                        legend.title.color = format_color,
+                        frame = FALSE,
+                        legend.outside = TRUE,
+                        legend.outside.position = "left",
+                        legend.outside.size = .5,
+                        legend.text.size = .6 ) +
+        tmap::tm_layout(legend.show = legend)
+
+      }
+    }
+    else {
+
     map <- tmap::tm_shape(shape.clean) +
       tmap::tm_fill(variable, breaks=breaks, title = title_name,
                     palette = colors,
@@ -183,13 +229,18 @@ sd_map <- function (state="New Jersey", map_var = "Student Poverty", level = "el
                       main.title = state,
                       main.title.position = "center",
                       main.title.color = format_color,
-                      legend.position = c("left", "bottom"),
+                     # legend.position = c("left", "bottom"),
                       legend.text.color = format_color,
                       legend.title.color = format_color,
                       frame = FALSE,
-                      inner.margins = c(0.1, 0.3, 0.1, 0.2)) +
+                      legend.outside = TRUE,
+                      legend.outside.position = "left",
+                     legend.outside.size = .5,
+                     legend.text.size = .6
+                     # outer.margins = c(0,0,0,0)
+                     ) +
       tmap::tm_layout(legend.show = legend)
-
+    }
      map  ### view the map
   }
 }

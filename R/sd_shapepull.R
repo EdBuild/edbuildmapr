@@ -4,13 +4,13 @@
 #' Bureau, Education Demographic and Geographic Estimates Program (EDGE),
 #' Composite School District Boundaries File.
 #' @param data_year Four digit year of shapefile data you would like to pull.
-#'   Available for any school year from 2013 to 2017.
+#'   Available for any school year from 2013 to 2018.
 #' @param with_data TRUE to attach EdBuild's school district master dataset to
 #'   shapefile. Defaults to FALSE.
 #' @keywords shapefile EdBuild
 #' @import dplyr magrittr stringr sf
 #' @importFrom utils read.csv
-#' @usage sd_shapepull(data_year = "2017", with_data=FALSE)
+#' @usage sd_shapepull(data_year = "2018", with_data=FALSE)
 #' @return A spatial object where each row is a school district.
 #' @export
 #' @format Simple feature collection with 6 fields: \describe{
@@ -23,20 +23,16 @@
 #' \url{https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/SD+shapes/2018/shapefile_1718.zip}
 #'
 #' @examples
-#' \donttest{sd_shp_17 <- sd_shapepull("2017")}
+#' \donttest{sd_shp_18 <- sd_shapepull("2018")}
 
 
-sd_shapepull = function(data_year = "2017", with_data=FALSE) {
+sd_shapepull = function(data_year = "2018", with_data=FALSE) {
   if (as.numeric(data_year)<2013) {
     message("Error: sd_shapepull cannot be used for data before the year 2013")
   }
 
   else if (as.numeric(data_year)>2018) {
     message("Error: The most recent year of school district shapefiles is for 2018; data_year > 2018 is not valid")
-  }
-
-  else if (as.numeric(data_year)==2018 & with_data == TRUE) {
-    message("Error: The most recent year with a full school district dataset is 2017; with_data == TRUE is not valid for data_year >2017")
   }
 
   else {
@@ -194,6 +190,27 @@ sd_shapepull = function(data_year = "2017", with_data=FALSE) {
           dplyr::mutate(NCESID = as.character(NCESID),
                         NCESID = stringr::str_pad(NCESID, width = 7, pad = "0"),
                         year = "2017") %>%
+          dplyr::select(-NAME, -State, -STATE_FIPS) ## removing variables that duplicate with shapes
+
+        dataset <- dataset %>%
+          dplyr::left_join(master, by = c("GEOID" = "NCESID")) %>%
+          dplyr::rename(urb = dUrbanicity,
+                        op_shcls = dOperational_schools,
+                        enroll_ccd = dEnroll_district,
+                        dHaw_PI = dHawaiian_PI,
+                        dAmInd_AK = dAmIndian_Aknative,
+                        d2races = d2plus_races,
+                        pctNW = pctNonwhite,
+                        st_per_sqmi = student_per_sq_mile) %>%
+          dplyr::filter(NAME != "School District Not Defined") %>%
+          dplyr::mutate(frl_rate = dFRL/enroll_ccd)
+      }
+      else if(as.numeric(data_year)==2018) {
+        url = "https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/Master/2018/full_data_18_geo_exc.csv"
+        master <- read.csv(file = url, stringsAsFactors = FALSE) %>%
+          dplyr::mutate(NCESID = as.character(NCESID),
+                        NCESID = stringr::str_pad(NCESID, width = 7, pad = "0"),
+                        year = "2018") %>%
           dplyr::select(-NAME, -State, -STATE_FIPS) ## removing variables that duplicate with shapes
 
         dataset <- dataset %>%

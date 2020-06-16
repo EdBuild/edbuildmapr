@@ -36,7 +36,7 @@ Chicago is a unified district with 1 unified neighbor,
 16 secondary neighbors, and 32 elementary neighbors.}
 }
 \value{
-An image of map which can be written out with
+An image of the map which can be written out with
   \code{tmap::tmap_save(map, '~/Documents/map.png')}
 }
 \description{
@@ -44,7 +44,7 @@ This function allows you to create a map of any school
   district with its neighbors symbolized by a selected variable.
 }
 \examples{
-\donttest{map <- sd_neighbor_map(school_district = "2601103", "Median Household Income")}
+\donttest{map <- sd_neighbor_map(school_district = "2601103", "Percent Nonwhite")}
 }
 \seealso{
 \code{\link{sd_map}}
