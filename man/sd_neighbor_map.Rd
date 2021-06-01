@@ -4,10 +4,13 @@
 \alias{sd_neighbor_map}
 \title{A function to create a map of a school district and its neighbors}
 \usage{
-sd_neighbor_map(school_district = NULL,
+sd_neighbor_map(data_year = "2019", school_district = NULL,
  map_var = "Student Poverty", legend= TRUE, type = "like")
 }
 \arguments{
+\item{data_year}{Four digit year of master data to pull in. Options include
+2013- 2019. Defaults to 2019.}
+
 \item{school_district}{Seven digit NCESID of the school district. Default is
 NULL.}
 
@@ -44,7 +47,7 @@ This function allows you to create a map of any school
   district with its neighbors symbolized by a selected variable.
 }
 \examples{
-\donttest{map <- sd_neighbor_map(school_district = "2601103", "Percent Nonwhite")}
+\donttest{map <- sd_neighbor_map(data_year = "2019", school_district = "2901000", "Percent Nonwhite")}
 }
 \seealso{
 \code{\link{sd_map}}

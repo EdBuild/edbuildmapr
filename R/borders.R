@@ -6,9 +6,9 @@
 #'  shapefile can be used.
 #'@param shapefile The polygon shapefile for which you want to define the
 #'  borders. To import the school district shapefile for school years between
-#'  2013 and 2018, input the four digit year. Import any polygon shapefile by
+#'  2013 and 2019, input the four digit year. Import any polygon shapefile by
 #'  inputting the absolute path to the shapefile on your computer. Defaults to
-#'  the 2018 school district shapes.
+#'  the 2019 school district shapes.
 #'@param id Unique variable used to create id for each pair of neighbors.
 #'  Defaults to GEOID, the unique id in Census data.
 #'@param diff_var Name of a numeric variable by which to rank the difference
@@ -18,7 +18,7 @@
 #'@param export The type of object to return, dataframe or shape. Default to
 #'  dataframe.
 #'@keywords school districts map EdBuild
-#'@usage borders(shapefile = "2018", id = "GEOID", diff_var = "StPovRate",
+#'@usage borders(shapefile = "2019", id = "GEOID", diff_var = "StPovRate",
 #'  export = "dataframe")
 #'@import dplyr sf tidyselect magrittr
 #'@importFrom utils download.file unzip
@@ -45,7 +45,7 @@
 #'@seealso \code{\link{sd_shapepull}}, \code{\link{sd_neighbor_map}}
 #'@export
 #' @examples
-#' \donttest{dataframe_ex <- borders(shapefile = "2018",
+#' \donttest{dataframe_ex <- borders(shapefile = "2019",
 #'                  id = "GEOID",
 #'                  diff_var = "MHI",
 #'                  export = "dataframe")
@@ -56,9 +56,9 @@
 #'                  export = "shape")}
 
 
-borders = function(shapefile = "2018", id = "GEOID", diff_var = "StPovRate", export = "dataframe") {
+borders = function(shapefile = "2019", id = "GEOID", diff_var = "StPovRate", export = "dataframe") {
 
-  if (shapefile == "2013" | shapefile == "2014" | shapefile == "2015" | shapefile == "2016" | shapefile == "2017" | shapefile == "2018") {
+  if (shapefile == "2013" | shapefile == "2014" | shapefile == "2015" | shapefile == "2016" | shapefile == "2017" | shapefile == "2018" | shapefile == "2019") {
     shape_all_fields <- sd_shapepull(shapefile, with_data = TRUE)
   }
   else {

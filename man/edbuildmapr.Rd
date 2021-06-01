@@ -7,7 +7,7 @@
 analysis, and create formatted exportable maps.}
 \description{
 Import US Census Bureau, Education Demographic and Geographic Estimates
-Program, Composite School District Boundaries Files for 2013-2018 with the
+Program, Composite School District Boundaries Files for 2013-2019 with the
 option to attach EdBuild's master dataset of school district finance, student
 demographics, and community economic indicators for every school district in
 the United States. The master dataset is built from the US Census, Annual
@@ -18,8 +18,8 @@ Geographic Estimates. Additional functions in the package create a dataset of
 all pairs of school district neighbors as either a dataframe or a shapefile
 and create formatted maps of selected districts at the state or neighbor
 level, symbolized by a selected variable in EdBuild's master dataset. For full
-details about 'EdBuild' data processing please see: EdBuild (2019)
-\href{https://edbuild.org/content/dividing-lines/main/methodology}{Dividing Lines}.
+details about 'EdBuild' data processing please see: EdBuild (2020)
+\href{http://data.edbuild.org/}{Methodology}.
 }
 \section{edbuildmapr functions}{
  The edbuildmapr functions are: \describe{
@@ -37,7 +37,7 @@ details about 'EdBuild' data processing please see: EdBuild (2019)
  school district in the US.} \item{\code{\link{state_shapepull}}}{Import a
  simplified version of state shapefiles matching the US Census Bureau,
  Education Demographic and Geographic Estimates Program (EDGE), Composite
- School District Boundaries File for 2018.}}
+ School District Boundaries File for 2019.}}
 }
 
 \author{

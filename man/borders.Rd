@@ -21,15 +21,15 @@
  \item{geography}{Linestring
  spatial object if user selected to export as a shape} }}
 \usage{
-borders(shapefile = "2018", id = "GEOID", diff_var = "StPovRate",
+borders(shapefile = "2019", id = "GEOID", diff_var = "StPovRate",
  export = "dataframe")
 }
 \arguments{
 \item{shapefile}{The polygon shapefile for which you want to define the
 borders. To import the school district shapefile for school years between
-2013 and 2018, input the four digit year. Import any polygon shapefile by
+2013 and 2019, input the four digit year. Import any polygon shapefile by
 inputting the absolute path to the shapefile on your computer. Defaults to
-the 2018 school district shapes.}
+the 2019 school district shapes.}
 
 \item{id}{Unique variable used to create id for each pair of neighbors.
 Defaults to GEOID, the unique id in Census data.}
@@ -53,7 +53,7 @@ This function allows you to create a dataframe or linestring
  shapefile can be used.
 }
 \examples{
-\donttest{dataframe_ex <- borders(shapefile = "2018",
+\donttest{dataframe_ex <- borders(shapefile = "2019",
                  id = "GEOID",
                  diff_var = "MHI",
                  export = "dataframe")

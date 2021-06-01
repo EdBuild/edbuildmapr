@@ -3,11 +3,13 @@
 #' @description This function allows you to create a map of all school
 #'   districts, in each state in the United States, symbolized by selected
 #'   variables from the EdBuild master dataset.
+#' @param data_year Four digit year of master data to pull in. Options include
+#'   2013- 2019. Defaults to 2019.
 #' @param state The state for which you want to map school districts.  Defaults
 #'   to New Jersey.
 #' @param county The county for which you want to map school districts.
 #'   Defaults to NULL. To view a full list of counties use
-#'   \code{sd_shapepull(year = "2018", with_data = TRUE)}
+#'   \code{sd_shapepull(year = "2019", with_data = TRUE)}
 #' @param map_var Variable by which to symbolize the map. \itemize{
 #'   \item{\code{Student Poverty} colors by student poverty rate}
 #'   \item{\code{Total Revenue} colors by state and local revenue per pupil}
@@ -24,7 +26,7 @@
 #'   Defaults to \code{elem}.
 #' @param legend If TRUE, legend is visible. Defaults to TRUE.
 #' @keywords school districts map EdBuild
-#' @usage sd_map(state="New Jersey", county = NULL, map_var = "Student Poverty",
+#' @usage sd_map(data_year = "2019", state="New Jersey", county = NULL, map_var = "Student Poverty",
 #'   level = "elem", legend= TRUE)
 #' @import dplyr sf magrittr
 #' @importFrom tmap tm_shape tm_fill tm_borders tm_layout
@@ -37,8 +39,8 @@
 #'  level = "elem", legend= TRUE)}
 
 
-sd_map <- function (state="New Jersey", county = NULL,  map_var = "Student Poverty", level = "elem", legend= TRUE) {
-  shape <- sd_shapepull(data_year = "2018", with_data = TRUE)
+sd_map <- function (data_year = "2019", state="New Jersey", county = NULL,  map_var = "Student Poverty", level = "elem", legend= TRUE) {
+  shape <- sd_shapepull(data_year = data_year, with_data = TRUE)
 
   states <- shape
   sf::st_geometry(states) <- NULL
@@ -54,8 +56,8 @@ sd_map <- function (state="New Jersey", county = NULL,  map_var = "Student Pover
                   Postal = as.character(Postal),
                   sdType= as.character(sdType)) %>%
     dplyr::filter(State == state) %>%
-    dplyr::mutate(frl_rate = dplyr::case_when(frl_rate > 1 ~  NA_real_,
-                                              TRUE ~ frl_rate),
+    dplyr::mutate(frl_rate = dplyr::case_when(frl_rate > 1 ~ NA_real_,
+                                              TRUE ~ as.double(frl_rate)),
                   MPV = as.numeric(MPV),
                   MHI = as.numeric(MHI))
 
@@ -66,7 +68,7 @@ sd_map <- function (state="New Jersey", county = NULL,  map_var = "Student Pover
 
   if(map_var %in% pos_vars == FALSE) {
 
-    message("Error: School district mapping is only available for the following variables: Student Poverty, Percent Nonwhite, FRL, Total Revenue, Local Revenue, State Revenue, Median Household Income and Median Property Value")
+    message("Error: School district mapping is only available for the following variables: Student Poverty, Percent Nonwhite, FRL, Total Revenue, Local Revenue, State Revenue, Median Household Income and Median Property Value. FRL is not available for 2019.")
   }
 
   else if (state %in% states_list == FALSE) {
@@ -148,7 +150,10 @@ sd_map <- function (state="New Jersey", county = NULL,  map_var = "Student Pover
 
       message("NOTE:: save your map to the desired location using: tmap::tmap_save(map, bg = 'transparent', '~/Documents/median_property_value_map.png')")
 
-      }
+    }
+    else if(map_var == "FRL" & data_year == "2019"){
+      message("Error: FRL data is  not available for 2019. To map FRL rates, please use data_year 2018.")
+    }
     else if(map_var == "FRL"){
       colors <- c('#e3b1a5', '#ce7965',  '#c2573e', '#823a29', '#4e2319')
       title_name = "FRL Rate"

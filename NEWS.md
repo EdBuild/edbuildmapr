@@ -1,3 +1,8 @@
+# edbuildmapr 0.3.0
+
+* added parameter to `<sd_map()>` and `<sd_neighbor_map()>` to select the data year to map
+* updated all functions with 2019 data
+
 # edbuildmapr 0.2.0
 
 * added new function `<state_shapepull()>` to import state shapefile that matches school district borders

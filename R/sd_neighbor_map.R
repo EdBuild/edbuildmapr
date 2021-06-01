@@ -2,8 +2,10 @@
 #' @name sd_neighbor_map
 #' @description This function allows you to create a map of any school
 #'   district with its neighbors symbolized by a selected variable.
-#' @usage sd_neighbor_map(school_district = NULL,
+#' @usage sd_neighbor_map(data_year = "2019", school_district = NULL,
 #'  map_var = "Student Poverty", legend= TRUE, type = "like")
+#' @param data_year Four digit year of master data to pull in. Options include
+#'   2013- 2019. Defaults to 2019.
 #' @param school_district Seven digit NCESID of the school district. Default is
 #'   NULL.
 #' @param map_var Variable by which to symbolize the map.
@@ -35,11 +37,11 @@
 #' @seealso \code{\link{sd_map}}
 #' @export
 #' @examples
-#' \donttest{map <- sd_neighbor_map(school_district = "2601103", "Percent Nonwhite")}
+#' \donttest{map <- sd_neighbor_map(data_year = "2019", school_district = "2901000", "Percent Nonwhite")}
 
-sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", legend= TRUE, type = "like"){
+sd_neighbor_map = function(data_year = "2019", school_district = NULL, map_var = "Student Poverty", legend= TRUE, type = "like"){
 
-  shape <- sd_shapepull(data_year = "2017", with_data = TRUE)
+  shape <- sd_shapepull(data_year = data_year, with_data = TRUE)
 
   ncesid <- shape$GEOID
 
@@ -60,14 +62,27 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
     If you do not know the NCESID of a school district, use sd_shapepull() to search for your district.")
   }
 
+  else if(map_var == "FRL" & data_year == "2019"){
+    message("Error: FRL data is  not available for 2019. To map FRL rates, please use data_year 2018.")
+  }
+
   else  {
-    sd_url = "https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/SD+Types/sd_type_17_18.csv"
-    sd_type <- read.csv(file = sd_url, stringsAsFactors = FALSE)
+    sd_type <- as.data.frame(shape) %>%
+      dplyr::select(-geometry) %>%
+      dplyr::select(GEOID, sdType)
 
     shape.clean <- sf::st_make_valid(shape) # making all geometries valid
 
-    pairs_url = "https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/Pairs/pairs_1617.csv"
+    pairs_year = case_when(data_year == "2013" | data_year == "2014" ~ "1314",
+                           data_year == "2015" | data_year == "2016" ~ "1516",
+                           data_year == "2017" | data_year == "2018" ~ "1617",
+                           data_year == "2019" ~ "1819",
+                           TRUE ~ "1819")
+
+    pairs_url = paste("https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/Pairs/pairs", paste(pairs_year, ".csv", sep=""), sep ="_")
     pairs <- read.csv(file = pairs_url, stringsAsFactors = FALSE) %>%
+      dplyr::mutate(GEOID = as.character(stringr::str_pad(GEOID, width = 7, "left", pad = "0")),
+                    GEOID.1 = as.character(stringr::str_pad(GEOID.1, width = 7,  "left", pad = "0"))) %>%
       dplyr::left_join(sd_type, by = "GEOID") %>%
       dplyr::rename(sdtype_1 = sdType) %>%
       dplyr::left_join(sd_type, by = c("GEOID.1" = "GEOID")) %>%
@@ -76,8 +91,6 @@ sd_neighbor_map = function(school_district = NULL, map_var = "Student Poverty", 
                     FIPS_2 = substr(GEOID.1, 0, 2)) %>%
       dplyr::filter(FIPS_1 == FIPS_2,      ## filtering out pairs where they are across state lines
                     length >= 152.4) %>%     ## filtering out pairs where the border is less than 500 feet
-      dplyr::mutate(GEOID = as.character(stringr::str_pad(GEOID, width = 7, pad = "0")),
-                    GEOID.1 = as.character(stringr::str_pad(GEOID.1, width = 7, pad = "0"))) %>%
       dplyr::filter(GEOID == school_district)
 
     if(map_var == "Student Poverty"){

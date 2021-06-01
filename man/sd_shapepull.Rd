@@ -3,21 +3,21 @@
 \name{sd_shapepull}
 \alias{sd_shapepull}
 \title{A function to import school district shapefiles}
-\format{Simple feature collection with 6 fields: \describe{
+\format{Simple feature collection with 6 fields and geometry Multi Polygon: \describe{
   \item{GEOID}{Unique school district ID, character} \item{NAME}{School
   district name, character string} \item{sdType}{School district level,
   character string} \item{FIPS}{State ID, character} \item{State}{State name,
   character} \item{Postal}{State postal code, character}
   \item{geometry}{sfc_MULTIPOLYGON} }}
 \source{
-\url{https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/SD+shapes/2018/shapefile_1718.zip}
+\url{https://s3.amazonaws.com/data.edbuild.org/public/Processed+Data/SD+shapes/2019/shapefile_1819.zip}
 }
 \usage{
-sd_shapepull(data_year = "2018", with_data=FALSE)
+sd_shapepull(data_year = "2019", with_data=FALSE)
 }
 \arguments{
 \item{data_year}{Four digit year of shapefile data you would like to pull.
-Available for any school year from 2013 to 2018.}
+Available for any school year from 2013 to 2019.}
 
 \item{with_data}{TRUE to attach EdBuild's school district master dataset to
 shapefile. Defaults to FALSE.}
@@ -31,7 +31,7 @@ Bureau, Education Demographic and Geographic Estimates Program (EDGE),
 Composite School District Boundaries File.
 }
 \examples{
-\donttest{sd_shp_18 <- sd_shapepull("2018")}
+\donttest{sd_shp_19 <- sd_shapepull("2019")}
 }
 \keyword{EdBuild}
 \keyword{shapefile}

@@ -1,6 +1,20 @@
 ## Resubmission
 This is a resubmission. In this version I have: 
 
+* added parameter to `<sd_map()>` and `<sd_neighbor_map()>` to select the data year to map
+* updated all functions with 2019 data
+
+## Test environments
+* local OS X install, R 3.6.2
+* win-builder (devel and release)
+
+## R CMD check results
+
+0 errors | 0 warnings | 0 notes
+
+## Resubmission
+This is a resubmission. In this version I have: 
+
 * added new function `<state_shapepull()>` to import state shapefile that matches school district borders
 * added parameter to `<sd_map()>` to map a county instead of a state
 * corrected legend display size in `<sd_map()>` and `<sd_neighbor_map()>`

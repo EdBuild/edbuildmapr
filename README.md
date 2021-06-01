@@ -10,7 +10,7 @@
 The goal of `edbuildmapr` is to simplify the use of school district
 shapefiles. The package import US Census Bureau, Education Demographic
 and Geographic Estimates Program, Composite School District Boundaries
-Files for 2013-2018 with the option to attach EdBuild’s master dataset
+Files for 2013-2019 with the option to attach EdBuild’s master dataset
 of school district finance, student demographics, and community economic
 indicators for every school district in the United States. The master
 dataset is built from the US Census, Annual Survey of School System
@@ -22,7 +22,7 @@ dataset of all school district neighbors as either a dataframe or a
 shapefile and maps of selected districts at the state or neighbor level
 symbolized by a selected variable in EdBuild’s master dataset. For full
 details about EdBuild’s data processing please see EdBuild (2020)
-[Methodology](https://data.edbuild.org/).
+[Methodology](http://data.edbuild.org/).
 
 ## Installation
 
@@ -42,7 +42,7 @@ master data:
 library(edbuildmapr)
 ## import school district shapefile for the year 2018 with EdBuild's master dataset attached. 
 sd_shp_18 <- sd_shapepull("2018", with_data = TRUE)
-#> Reading layer `shapefile_1718_4269' from data source `/private/var/folders/5n/cz5rxt2d02jcqlt7q25sy37m0000gp/T/RtmpHoTFqD/filea47572b1be98/shapefile_1718_4269.shp' using driver `ESRI Shapefile'
+#> Reading layer `shapefile_1718_4269' from data source `/private/var/folders/5n/cz5rxt2d02jcqlt7q25sy37m0000gp/T/RtmpCQgk5c/filef68a4f4911a/shapefile_1718_4269.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 13330 features and 6 fields
 #> geometry type:  MULTIPOLYGON
 #> dimension:      XY
@@ -51,7 +51,7 @@ sd_shp_18 <- sd_shapepull("2018", with_data = TRUE)
 #> NOTE::This shapefile has been simplified to make analysis quicker. For final vizualizations, please use the unsimplified shapefiles available through NCES.
 
 str(sd_shp_18)
-#> Classes 'sf' and 'data.frame':   13309 obs. of  47 variables:
+#> Classes 'sf' and 'data.frame':   13309 obs. of  46 variables:
 #>  $ FIPS       : chr  "04" "04" "04" "04" ...
 #>  $ GEOID      : chr  "0407530" "0401740" "0401160" "0400720" ...
 #>  $ NAME       : chr  "Santa Cruz Valley Union High School District" "Casa Grande Union High School District" "Bicentennial Union High School District" "Antelope Union High School District" ...
@@ -66,7 +66,6 @@ str(sd_shp_18)
 #>  $ LR         : num  4138000 19241000 1575000 2563000 34370000 ...
 #>  $ SR         : num  976000 14500000 164000 263000 48967000 ...
 #>  $ SLR        : num  5114000 33741000 1739000 2826000 83337000 ...
-#>  $ COLIn      : num  0.971 0.971 1.002 0.957 0.957 ...
 #>  $ SRPP_cola  : num  2739 4423 1475 1249 4669 ...
 #>  $ LRPP_cola  : num  11612 5870 14161 12173 3277 ...
 #>  $ SLRPP_cola : num  14351 10293 15635 13423 7946 ...

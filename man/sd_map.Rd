@@ -4,16 +4,19 @@
 \alias{sd_map}
 \title{A function to create a map of all school districts in a state}
 \usage{
-sd_map(state="New Jersey", county = NULL, map_var = "Student Poverty",
+sd_map(data_year = "2019", state="New Jersey", county = NULL, map_var = "Student Poverty",
   level = "elem", legend= TRUE)
 }
 \arguments{
+\item{data_year}{Four digit year of master data to pull in. Options include
+2013- 2019. Defaults to 2019.}
+
 \item{state}{The state for which you want to map school districts.  Defaults
 to New Jersey.}
 
 \item{county}{The county for which you want to map school districts.
 Defaults to NULL. To view a full list of counties use
-\code{sd_shapepull(year = "2018", with_data = TRUE)}}
+\code{sd_shapepull(year = "2019", with_data = TRUE)}}
 
 \item{map_var}{Variable by which to symbolize the map. \itemize{
 \item{\code{Student Poverty} colors by student poverty rate}
