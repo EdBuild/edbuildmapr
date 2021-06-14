@@ -1,6 +1,20 @@
 ## Resubmission
 This is a resubmission. In this version I have: 
 
+* fixed bug in `<borders()>` causing the condition has length > 1 error
+* added parameter to `<borders()>` to select a specific state for analysis
+
+## Test environments
+* local OS X install, R 3.6.2
+* win-builder (devel and release)
+
+## R CMD check results
+
+0 errors | 0 warnings | 0 notes
+
+## Resubmission
+This is a resubmission. In this version I have: 
+
 * added parameter to `<sd_map()>` and `<sd_neighbor_map()>` to select the data year to map
 * updated all functions with 2019 data
 

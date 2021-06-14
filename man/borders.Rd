@@ -2,27 +2,22 @@
 % Please edit documentation in R/borders.R
 \name{borders}
 \alias{borders}
-\title{A function to create a file of the borders between neighboring districts}
+\title{A function to create a file of the borders between neighboring
+ districts}
 \format{A data frame with 7 variables or spatial object with 8 variables:
- \describe{ \item{year}{data year}
- \item{u_id}{Unique id of neighbor pair, a
- compilation of id1 and id2}
- \item{id1}{Unique id of first district}
- \item{id2}{Unique id of second district}
- \item{length}{Length of border in
+ \describe{ \item{year}{data year} \item{u_id}{Unique id of neighbor pair, a
+ compilation of id1 and id2} \item{id1}{Unique id of first district}
+ \item{id2}{Unique id of second district} \item{length}{Length of border in
  meters for the school district shapefiles, and in the units associated with
  the projection of the shapefile if the user imports their own shapefile}
  \item{diff_var_1}{Value of the selected \code{diff_var} for the first
- district}
- \item{diff_var_2}{Value of the selected \code{diff_var}  for the
- second district}
- \item{diff_in_diff_var}{Difference in the selected
- \code{diff_var} between district one and two}
- \item{geography}{Linestring
+ district} \item{diff_var_2}{Value of the selected \code{diff_var}  for the
+ second district} \item{diff_in_diff_var}{Difference in the selected
+ \code{diff_var} between district one and two} \item{geography}{Linestring
  spatial object if user selected to export as a shape} }}
 \usage{
-borders(shapefile = "2019", id = "GEOID", diff_var = "StPovRate",
- export = "dataframe")
+borders(shapefile = "2019", state = NULL, id = "GEOID", diff_var =
+ "StPovRate", export = "dataframe")
 }
 \arguments{
 \item{shapefile}{The polygon shapefile for which you want to define the
@@ -30,6 +25,9 @@ borders. To import the school district shapefile for school years between
 2013 and 2019, input the four digit year. Import any polygon shapefile by
 inputting the absolute path to the shapefile on your computer. Defaults to
 the 2019 school district shapes.}
+
+\item{state}{State name. Can only be used with the school district shapefile.
+Defaults to NULL to find all borders nationwide.}
 
 \item{id}{Unique variable used to create id for each pair of neighbors.
 Defaults to GEOID, the unique id in Census data.}
@@ -51,17 +49,6 @@ This function allows you to create a dataframe or linestring
  spatial object of the borders between neighboring districts from any polygon
  shapefile. It is optimized for school districts in the US, but any polygon
  shapefile can be used.
-}
-\examples{
-\donttest{dataframe_ex <- borders(shapefile = "2019",
-                 id = "GEOID",
-                 diff_var = "MHI",
-                 export = "dataframe")
-
-shapefile_ex <- borders(shapefile = "2018",
-                 id = "GEOID",
-                 diff_var = "pctNW",
-                 export = "shape")}
 }
 \seealso{
 \code{\link{sd_shapepull}}, \code{\link{sd_neighbor_map}}

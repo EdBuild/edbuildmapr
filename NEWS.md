@@ -1,3 +1,8 @@
+# edbuildmapr 0.3.1
+
+* fixed bug in `<borders()>` causing the condition has length > 1 error
+* added parameter to `<borders()>` to select a specific state for analysis
+
 # edbuildmapr 0.3.0
 
 * added parameter to `<sd_map()>` and `<sd_neighbor_map()>` to select the data year to map

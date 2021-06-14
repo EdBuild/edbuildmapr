@@ -1,4 +1,5 @@
-#'@title A function to create a file of the borders between neighboring districts
+#'@title A function to create a file of the borders between neighboring
+#'  districts
 #'@name borders
 #'@description This function allows you to create a dataframe or linestring
 #'  spatial object of the borders between neighboring districts from any polygon
@@ -9,6 +10,8 @@
 #'  2013 and 2019, input the four digit year. Import any polygon shapefile by
 #'  inputting the absolute path to the shapefile on your computer. Defaults to
 #'  the 2019 school district shapes.
+#'@param state State name. Can only be used with the school district shapefile.
+#'  Defaults to NULL to find all borders nationwide.
 #'@param id Unique variable used to create id for each pair of neighbors.
 #'  Defaults to GEOID, the unique id in Census data.
 #'@param diff_var Name of a numeric variable by which to rank the difference
@@ -18,48 +21,52 @@
 #'@param export The type of object to return, dataframe or shape. Default to
 #'  dataframe.
 #'@keywords school districts map EdBuild
-#'@usage borders(shapefile = "2019", id = "GEOID", diff_var = "StPovRate",
-#'  export = "dataframe")
+#'@usage borders(shapefile = "2019", state = NULL, id = "GEOID", diff_var =
+#'  "StPovRate", export = "dataframe")
 #'@import dplyr sf tidyselect magrittr
 #'@importFrom utils download.file unzip
 #'@importFrom spdep poly2nb
+#'@importFrom tibble obj_sum
 #'@return A dataframe or spatial object where each observation is a neighboring
 #'  pair of districts.
 #'@format A data frame with 7 variables or spatial object with 8 variables:
-#'  \describe{ \item{year}{data year}
-#'  \item{u_id}{Unique id of neighbor pair, a
-#'  compilation of id1 and id2}
-#'  \item{id1}{Unique id of first district}
-#'  \item{id2}{Unique id of second district}
-#'  \item{length}{Length of border in
+#'  \describe{ \item{year}{data year} \item{u_id}{Unique id of neighbor pair, a
+#'  compilation of id1 and id2} \item{id1}{Unique id of first district}
+#'  \item{id2}{Unique id of second district} \item{length}{Length of border in
 #'  meters for the school district shapefiles, and in the units associated with
 #'  the projection of the shapefile if the user imports their own shapefile}
 #'  \item{diff_var_1}{Value of the selected \code{diff_var} for the first
-#'  district}
-#'  \item{diff_var_2}{Value of the selected \code{diff_var}  for the
-#'  second district}
-#'  \item{diff_in_diff_var}{Difference in the selected
-#'  \code{diff_var} between district one and two}
-#'  \item{geography}{Linestring
+#'  district} \item{diff_var_2}{Value of the selected \code{diff_var}  for the
+#'  second district} \item{diff_in_diff_var}{Difference in the selected
+#'  \code{diff_var} between district one and two} \item{geography}{Linestring
 #'  spatial object if user selected to export as a shape} }
 #'@seealso \code{\link{sd_shapepull}}, \code{\link{sd_neighbor_map}}
 #'@export
-#' @examples
-#' \donttest{dataframe_ex <- borders(shapefile = "2019",
+#'@examples
+#' \donttest{dataframe_ex <- borders(shapefile = "2018",
+#'                  state = "New Jersey",
 #'                  id = "GEOID",
 #'                  diff_var = "MHI",
 #'                  export = "dataframe")
-#'
-#' shapefile_ex <- borders(shapefile = "2018",
-#'                  id = "GEOID",
-#'                  diff_var = "pctNW",
-#'                  export = "shape")}
 
 
-borders = function(shapefile = "2019", id = "GEOID", diff_var = "StPovRate", export = "dataframe") {
+borders = function(shapefile = "2019", state = NULL, id = "GEOID", diff_var = "StPovRate", export = "dataframe") {
 
   if (shapefile == "2013" | shapefile == "2014" | shapefile == "2015" | shapefile == "2016" | shapefile == "2017" | shapefile == "2018" | shapefile == "2019") {
     shape_all_fields <- sd_shapepull(shapefile, with_data = TRUE)
+
+    state_list <- shape_all_fields$State
+
+   if (is.null(state) == TRUE) {
+     message( "You have not specified a state so borders() will calculate all school district borders in the nation. This will take approximately 15-20 minutes to run.")
+    }
+   else if(state %in% state_list == FALSE) {
+      message( "The state you specified is not available. Please check your spelling and try again.")
+    }
+
+    else {
+      shape_all_fields %<>% filter(State == state)
+    }
   }
   else {
     shape_all_fields <- sf::read_sf(shapefile)
@@ -88,33 +95,38 @@ borders = function(shapefile = "2019", id = "GEOID", diff_var = "StPovRate", exp
   #### clean this shapefile
   shape.clean <- sf::st_make_valid(shape) # making all geometries valid
 
-  shape_sf <- sf::st_collection_extract(shape.clean, type = c("POLYGON")) # taking just the polygons from the original shape data, in case it includes stray points or other
+  ifelse(grepl("POLYGON", tibble::obj_sum(shape.clean$geometry)),
+         shape_sf <- shape.clean,
+         shape_sf <- sf::st_collection_extract(shape.clean, "POLYGON")
+
+  ) # taking just the polygons from the original shape data, in case it includes stray points or other
 
   touches <- spdep::poly2nb(shape_sf)  # finding neighbors - gets all the neighbors, using snapping  and queen which st_intersect does not do
 
   ##### interset each shape with its neghbor
   intersection <- lapply(1:length(touches), function(from) {
+    sf::st_agr(shape.clean) = "constant"
     intersection_part <- sf::st_intersection(shape.clean[from,], shape.clean[touches[[from]],]) %>%
       dplyr::select(paste0(id, ""), paste0(id, ".1")) %>%
       dplyr::rename(ID1 = paste0(id, ""),
-             ID2 = paste0(id, ".1")) %>%
+                    ID2 = paste0(id, ".1")) %>%
       dplyr::mutate(u_id = paste(ID1, ID2, sep = "_"))
+
     if (nrow(intersection_part) > 1) {
-      if (grepl("MULTIPOLYGON", class(intersection_part$geometry))) {
-        lineseg <- intersection_part
-      }
-      else {
-        lineseg <- sf::st_collection_extract(intersection_part, type = c("LINESTRING"))
-      }
+      ifelse(grepl("MULTILINESTR|LINESTR", tibble::obj_sum(intersection_part$geometry)) |
+             inherits(st_geometry(intersection_part), c("sfc_MULTILINESTRING", "sfc_LINESTRING")),
+             ### tibble::obj_sum only returns the first 15 characters so grepl only searches for first 15
+             lineseg <- intersection_part,
+             lineseg <- sf::st_collection_extract(intersection_part, "LINESTRING"))
     }
     else {
-      if (grepl("GEOMETRYCOLLECTION", class(intersection_part$geometry))) {
-        lineseg <- sf::st_collection_extract(intersection_part, type = c("LINESTRING"))
-      }
-      else (
-        lineseg <- intersection_part
-      )
+      ifelse(grepl("GEOMETRYCOL", tibble::obj_sum(intersection_part$geometry)) |
+             !inherits(st_geometry(intersection_part), c("sfc_MULTILINESTRING", "sfc_LINESTRING")),
+             ### tibble::obj_sum only returns the first 15 characters so grepl only searches for first 15
+             lineseg <- sf::st_collection_extract(intersection_part, "LINESTRING"),
+             lineseg <- intersection_part)
     }
+
     lineseg <- sf::st_cast(lineseg, "MULTILINESTRING", ids = lines$u_id) %>%
       dplyr::mutate(length = sf::st_length(lineseg))
   })
